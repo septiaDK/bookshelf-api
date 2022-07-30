@@ -58,40 +58,43 @@ const addBookHandler = (request, h) => {
     return response;
 };
 
+// varibel container book filter name
+const bookFilters = ({ 
+    id, 
+    name, 
+    year, 
+    author, 
+    summary, 
+    publisher, 
+    pageCount, 
+    readPage, 
+    finished, 
+    reading, 
+    insertedAt, 
+    updatedAt  
+}) => ({ 
+    id, 
+    name, 
+    year, 
+    author, 
+    summary, 
+    publisher, 
+    pageCount, 
+    readPage, 
+    finished, 
+    reading, 
+    insertedAt, 
+    updatedAt  
+});
+
 // function get all book
 const getAllBooksHandler = (request, h) => {
-    const { name } = request.query;
+    const { name, reading } = request.query;
     let bookFilter;
+
+    // condition filter by name
     if(name !== undefined) {
-        bookFilter = books.map(
-            ({ 
-                id, 
-                name, 
-                year, 
-                author, 
-                summary, 
-                publisher, 
-                pageCount, 
-                readPage, 
-                finished, 
-                reading, 
-                insertedAt, 
-                updatedAt  
-            }) => ({ 
-                id, 
-                name, 
-                year, 
-                author, 
-                summary, 
-                publisher, 
-                pageCount, 
-                readPage, 
-                finished, 
-                reading, 
-                insertedAt, 
-                updatedAt  
-            })
-        ).filter(
+        bookFilter = books.map(bookFilters).filter(
             (book) => book.name.toLowerCase().includes(name.toLowerCase())
         );
 
@@ -105,6 +108,26 @@ const getAllBooksHandler = (request, h) => {
         return response;
     }
 
+    // condition filter by reading
+    if(reading !== undefined) {
+        if(reading === '1') {
+            bookFilter = books.filter(book => book.reading === true);      
+        } else if(reading === '0') {
+            bookFilter = books.filter(book => book.reading === false);
+        } 
+
+        const response = h.response({
+            status: 'success',
+            data: {
+                books: bookFilter
+            }
+        });
+        response.code(200);
+        return response;
+    }
+
+
+    // condition get all book
     const response = h.response({
         status: 'success',
         data: {
