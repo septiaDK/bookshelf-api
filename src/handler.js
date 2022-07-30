@@ -89,7 +89,7 @@ const bookFilters = ({
 
 // function get all book
 const getAllBooksHandler = (request, h) => {
-    const { name, reading } = request.query;
+    const { name, reading, finished } = request.query;
     let bookFilter;
 
     // condition filter by name
@@ -114,6 +114,24 @@ const getAllBooksHandler = (request, h) => {
             bookFilter = books.filter(book => book.reading === true);      
         } else if(reading === '0') {
             bookFilter = books.filter(book => book.reading === false);
+        } 
+
+        const response = h.response({
+            status: 'success',
+            data: {
+                books: bookFilter
+            }
+        });
+        response.code(200);
+        return response;
+    }
+
+    // condition filter by finished
+    if(finished !== undefined) {
+        if(finished === '1') {
+            bookFilter = books.filter(book => book.finished === true);      
+        } else if(finished === '0') {
+            bookFilter = books.filter(book => book.finished === false);
         } 
 
         const response = h.response({
