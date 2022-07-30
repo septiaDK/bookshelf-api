@@ -107,6 +107,7 @@ const getAllBooksHandler = (request, h) => {
 
   // condition filter by name
   if (name !== undefined) {
+    // function map bookFilters add variabel bookFilters
     bookFilter = books.map(bookFilters).filter(
       (book) => book.name.toLowerCase().includes(name.toLowerCase()),
     );
